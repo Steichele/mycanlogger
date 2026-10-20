@@ -23,7 +23,7 @@ Zusätzlich ist die Aufzeichnung und Weiterverarbeitung von Zeitdaten im **MDF4-
 
 ## Projektstatus
 
-- **Version:** 0.11.3
+- **Version:** 0.11.4
 - **Status:** WIP (Work in Progress)
 
 ---
