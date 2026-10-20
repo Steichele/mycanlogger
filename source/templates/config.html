@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CanopenLogger</title>
+    <link rel="stylesheet" href="{{cs.css}}">
+</head>
+<body>
+    <!-- <img src="static/Novotechnik.gif" alt="Overlay GIF" class="overlay-image"> -->
+    
+    <div id="sysinfo">
+        <h1> CanOpen Tracelogger </h1>
+        <h3>Sysinfo: {{ cs.hostname }}  <a href="http://{{ cs.myip }}:8081">IP der ETH0:{{ cs.myip }}</a>  Festplattenbelegung[%]: {{cs.diskusage}} Freier Arbeitsspeicher[MB]: {{cs.freeRam}}  Systemzeit: {{cs.systime}}  </h3> 
+        <a href="http://{{ cs.myip }}:8082">IO-Link Bridge</a>
+    </div>
+    <div id = "version"><h3>Version:{{cs.version}}</h3></div>    
+    <div id = "logo"><img src="{{ url_for('static', filename=cs.logo) }}" style="width: 49mm;"></div>
+
+<table style="width:95%; min-height: 1100px;" class="center">
+    <tr>
+        <td>
+
+            <form action="/config" method="post">
+            <tr>
+                <td>
+                    <table style="width:40%;">
+                        <tr>
+                            <td><h2>Color Settings</h2></td>
+                        </tr>
+                        <tr>
+                            <td style="width:30%; text-align: left;">Color Settings:</td>
+                            <td style="text-align: left;">
+                                <select id="color" name="color">
+                                    <option value="dark">Dark Mode</option>
+                                    <option value="bright">Bright Mode</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <br> <!-- Abstand zwischen den Tabellen -->
+
+                    <table style="width:40%; margin-top: 20px;">
+                        <tr>
+                            <td><h2>Upload Settings</h2></td>
+                        </tr>
+                        <tr>
+                            <td style="width:30%; text-align: left;">Server Directory:</td>
+                            <td><input type="text" id="serverdir" name="serverdir" placeholder="{{ uploader.remoteDir }}" value="{{ uploader.remoteDir }}"></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">Logger Directory:</td>
+                            <td><input type="text" id="loggerdir" name="loggerdir" placeholder="{{ uploader.localDir }}" value="{{ uploader.localDir }}"></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">User@Server:</td>
+                            <td>
+                                <input type="text" id="connection" name="user" placeholder="{{ uploader.server }}" value="{{ uploader.server }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">Location Upload-Script:</td>
+                            <td><input type="text" id="scriptlocation" name="scriptlocation" placeholder="{{ uploader.uploadFilePath }}" value="{{ uploader.uploadFilePath }}"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="submit" value="Set to Default Upload Settings">
+                            </td>
+                        </tr>
+                    </table>
+            </td>
+        </tr>
+    </table>
+</form>
+
+
+
+        </td>
+    </tr>
+</table>
+
+
+<script type="text/javascript" src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}"> </script>
+<script type="text/javascript"> 
+    const myip = "{{ cs.myip }}";
+</script>
+<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
+

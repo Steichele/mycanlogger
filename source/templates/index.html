@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CanopenLogger</title>
+    <link rel="stylesheet" href="{{cs.css}}">
+</head>
+<body>
+    <!-- <img src="static/Novotechnik.gif" alt="Overlay GIF" class="overlay-image"> -->
+    
+    <div id="sysinfo">
+        <h1> CanOpen Tracelogger </h1>
+        <h3>Sysinfo: {{ cs.hostname }}  <a href="http://{{ cs.myip }}:8081">IP der ETH0:{{ cs.myip }}</a>  Festplattenbelegung[%]: {{cs.diskusage}} Freier Arbeitsspeicher[MB]: {{cs.freeRam}}  Systemzeit: {{cs.systime}}  </h3> 
+        <a href="http://{{ cs.myip }}:8082">IO-Link Bridge</a>
+    </div>
+    <div id = "version"><h3>Version:{{cs.version}}</h3></div>    
+    <div id = "logo"><a href="http://{{ cs.myip }}:8081/config"><img src="{{ url_for('static', filename=cs.logo) }}" style="width: 49mm;"></a></div>
+
+    <table  style="width:95%; min-height: 1100px;" class="center">
+    <tr><td>
+       <div id ="messung" style="width: 30%;"> 
+        <table >
+        <tr>
+        <td colspan="2">
+            <h2> Interface Settings </h2>
+        </td>
+        </tr>
+            <form method="post" action="/">
+        <tr>
+        <td>
+            <label for="canhw">Interface:</label>
+        </td>
+        <td>
+            <select id="canhw" name="canhw">
+                {% for key, value in cs.canhw.items() %}
+                    <option value="{{ value }}">{{ key }}</option>
+                {% endfor %}
+            </select>
+        </td>
+        </tr>
+        <tr>
+        <td>
+            <label for="bitrate">Baudrate:</label>
+        </td>
+        <td>
+            <select id="bitrate" name="bitrate">
+            {% for key, value in cs.bitrate.items() %}
+                <option value="{{ value }}">{{ key }}</option>
+            {% endfor %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <button type="submit" name="hwsetup">Wechsle Interface</button>
+        </td>
+        <td>
+            <button type="submit" name="sstrace">Trace Start/Stop</button>
+        </form>
+        </td>
+    </tr>
+        
+        
+        <tr>
+            <td>
+                {% if cs.canbus %}
+                    <p><h4>CanHW: {{ cs.caninterface }} <br> Baudrate: {{ cs.interfacebitrate }}</h4></p>
+                {% else %}
+                    <p><h4>CanHW: Unknown <br> Baudrate: Unknown</h4></p>
+                {% endif %}
+            </td>
+        </tr>
+        
+        
+        <tr>
+            {% if cs.findsensor_running == False %}
+            
+            <div id="cancel">
+            
+            <td colspan="2">
+                <h2> MessKonfiguration </h2>
+            </td>
+            <td>  
+                
+                <form method="post" action="/" align="center">
+
+            <tr>
+            <tr>
+            <td>
+                <label for="nodeid">NodeId: als Liste [1,2,..]</label>
+            </td>
+            <td>
+                <input type="text" id="nodeid" name="nodeid" >
+            </td>
+            </tr>
+            <td>
+                <label for="function">Funktionen:</label>
+            </td>
+            <td>
+                <select id="function" name="function">
+                {% for key, value in cs.function.items() %}
+                    <option value="{{ value }}">{{ key }}</option>
+                {% endfor %}
+                </select>
+            </td>
+            </tr>
+            <tr>
+            <td>
+                <label for="cycle">Cycles:</label>
+            </td>
+            <td>
+                <select id="cycle" name="cycle">
+                {% for key, value in cs.cycle.items() %}
+                    <option value="{{ value }}">{{ key }}</option>
+                {% endfor %}
+                </select>
+            </td>
+            </tr>
+            {% if cs.blfloggerrunning == False %}
+            <tr>
+                <td>
+                    <label for="bearbeiter">Pruefer:</label>
+                </td>
+                <td>
+                    <input type="text" id="bearbeiter" name="bearbeiter" >
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="batch">Batch:</label>
+                </td>
+                <td>
+                    <input type="text" id="batch" name="batch" >
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="material">Material:</label>
+                </td>
+                <td>
+                    <input type="text" id="material" name="material" >
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="produkt">Produkt:</label>
+                </td>
+                <td>
+                    <input type="text" id="produkt" name="produkt" >
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="messbereich">Messbereich:</label>
+                </td>
+                <td>
+                    <input type="text" id="messbereich" name="messbereich" >
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="einheit">Einheit:</label>
+                </td>
+                <td>
+                    <input type="text" id="einheit" name="einheit" >
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="test">Testart:</label>
+                </td>
+                <td>
+                    <input type="text" id="test" name="test" >
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="test">Auftrag:</label>
+                </td>
+                <td>
+                    <input type="text" id="Auftrag" name="Auftrag" >
+                </td>
+            </tr>
+            <tr>
+
+                <td>
+                    <label for="blfFile">Messdateiname:</label>
+                </td>
+                <td>
+                    <input type="text" id="blfFile" name="blfFile" >
+                </td>
+            </tr>
+            {% endif %}
+            <tr>
+            <td colspan="2" style="text-align: right;">
+                <button type="submit" name="transmit">Eingabe</button>
+                </form>
+            </td>
+            {% else %}
+            <td>
+                <form method="post" action="/" align="center" >
+                    <button type="submit" name="transmit">Suche abbrechen</button>
+                    <input type="hidden" name="findsensor_running" value="False">
+                </form>
+            </td>
+            {% endif %}
+        </div>
+        </tr>
+    </table>
+
+    </div>
+    <table>
+    <tr>
+    <td>
+    
+    </td>
+    </tr> 
+    </table> 
+
+    </td><td>  
+            <table>
+                <tr>
+                    <td>
+                        <h2>System response:</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="status" width = "100%" >  
+                            {% if cs.findsensor_running == True %}
+                            <img src="{{url_for('static', filename='spinner.gif')}}"><br>
+                            {% endif %}
+                            {{ cs.status }} 
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+                        <tr>
+                        <td>
+                            <h2>Konfiguration laden</h2>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td colspan="2">
+                            <form action="/" method="post" enctype="multipart/form-data">
+                                <input type="file" style="font-size: 1em;" name="file" required >
+                                <button type="submit">Hochladen</button>
+                            </form>
+                        </td>
+                        </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>                
+
+                        {% if cs.startstoptrace == 1 %}
+                        <div id="canData" style="width:1000px;">
+
+                        </div>
+                        <br>
+                        <div style="text-align: center;">
+                        <button id="toggleCanData">
+                            CAN-Trace show/hide
+                        </button>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="decoded">
+                            <table id="decodedtable">
+                                <tr>
+                                    <td colspan="3">
+                                        <h2>Sensorwerte:</h2>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="tdright"> Signalname </th> <th class="tdright"> Value </th> <th class="tdright"> Signalcoment </th>
+                                </tr>
+                                {% for key, value in cs.decodedvalue.items() %}
+                                <tr>
+                                    <td class="tdright">
+                                        {{key}}:
+                                    </td>
+                                    <td class="tdright" style="width: 100px;" >
+                                        <strong>{{ value }}</strong>
+                                    </td>
+                                    <td class="tdright" style="width: 600px;">
+                                        {% if cs.comments[key] + '.xml' in cs.filelist %}
+                                        <a href="{{ url_for('downloadfile', filename= cs.comments[key]) }}.xml"> {{cs.comments[key]}}.xml </a>
+                                        {% else %}
+                                        {{cs.comments[key]}}
+                                        {% endif %}
+                                        
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="3" style="text-align: center;">
+                                        <a href="http://{{ cs.myip }}:8081/calc">Arithmetisches Signal hinzufügen</a><br>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                        </div>
+                    {% endif %} 
+                    </td>
+            </tr>
+        </table>  
+
+</td><td>
+
+    
+        <table  style="width: 600px;">
+
+        <tr><td>    
+        <h2> Messdateien und Sensorinformationen </h2> 
+        </td></tr>
+        <tr><td>
+        </td></tr>
+        <tr><td>
+
+
+            <!-- Download-Links für jede Datei -->
+            
+            <h2>Download-Dateien:</h2>
+            <div id ="files">
+                <ul>
+                    {% for file in cs.filelist %}
+                        {% if not (cs.decodedvalue.keys()|length <= 0.5) %}
+                            {% if not file.endswith('.xml') %}
+                                <li> <a href="{{ url_for('downloadfile', filename= file) }}"> {{file}} </a></li>
+                            {% endif %}
+                        {% else %}
+                            {% if not file.endswith('.ready') %}
+                                <li> <a href="{{ url_for('downloadfile', filename= file) }}"> {{file}} </a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+
+                <form method="POST" action="/writeconfig" style="text-align: center; margin-top: 20px;">
+                <button type="submit" name="delete"  onclick="return confirm('Achtung alle Daten werden gelöscht!. Fortfahren?')" style="background-color:red">Dateiverzeichnis aufräumen       
+                </button> 
+                </form>
+
+
+
+
+        </td></tr>
+
+
+        </table>
+
+</td>
+</tr>
+</table>
+
+
+<script type="text/javascript" src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}"> </script>
+<script type="text/javascript"> 
+    const myip = "{{ cs.myip }}";
+</script>
+<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CanopenLogger</title>
+    <link rel="stylesheet" href="{{cs.css}}">
+</head>
+<body>
+    <!-- <img src="static/Novotechnik.gif" alt="Overlay GIF" class="overlay-image"> -->
+    
+    <div id="sysinfo">
+        <h1> CanOpen Tracelogger </h1>
+        <h3>Sysinfo: {{ cs.hostname }}  <a href="http://{{ cs.myip }}:8081">IP der ETH0:{{ cs.myip }}</a>  Festplattenbelegung[%]: {{cs.diskusage}} Freier Arbeitsspeicher[MB]: {{cs.freeRam}}  Systemzeit: {{cs.systime}}  </h3> 
+        <a href="http://{{ cs.myip }}:8082">IO-Link Bridge</a>
+    </div>
+    <div id = "version"><h3>Version:{{cs.version}}</h3></div>    
+    <div id = "logo"><img src="{{ url_for('static', filename=cs.logo) }}" style="width: 49mm;"></div>
+
+<table style="width:95%; min-height: 1100px; border:0vmax" class="center">
+    <tr>
+        <td>
+
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <th><h1>Arithmetik Einstellungen</h1></th>
+                        </tr>
+                        <tr>
+                            <td><h2>Signale in der CanDB:</h2></td>
+                            {% for signal, message in ari.signalnames %}
+                                <tr>
+                                    <td>{{ signal }}</td>
+                                </tr>
+                            {% endfor %}
+                           
+                        </tr>
+                    </table>
+                </td>
+
+                <td>
+                    <form action="/calc" method="post">
+                        <table style="width:40%;">
+                            <tr>
+                                <th style="align-content: center; align-items: center;"><h1>Formel Editor</h1></th>
+                            </tr>
+                            <tr>
+                                <td><h2>Formel:</h2></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" id="formelinput" name="formelinput" value="DummySignal = SourceSignal1 + SourceSignal2 * 10" style="width: 40rem;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="submit" value="Formel Hinzufügen">
+                                </td>
+                        </table>
+                    </form>
+                </td>
+
+
+
+                <td>
+                    <table>
+                        <tr>
+                            <th><h1>Arithmetik Formeln</h1></th>
+                        </tr>
+                        <tr>
+                            <th><h2>Angelegte Formeln</h2></th>
+                        </tr>
+                        {% for key in ari.calcedSignals.keys() %}
+                            <tr>
+                                <td>
+                                    <form action="/calc" method="post" style="display: inline;">
+                                        <input type="hidden" name="delete_key" value="{{ key }}">
+                                        <li><button type="submit" style="width: min-content;">X</button>{{ key }} = {{ ari.calcedSignals[key] | string | replace("'", "") | replace('"', "") | replace("[", "") | replace("]", "") | replace(",", " ") }}</li>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <form action="/calc" method="post">
+                        <table style="width:40%;">
+                            <tr>
+                                <td colspan="2">
+                                    <input type="submit" value="Änderungen übernehmen" name="init" >
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </td>   
+            </tr>
+
+        </td>
+    </tr>
+</table>
+
+
+<script type="text/javascript" src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}"> </script>
+<script type="text/javascript"> 
+    const myip = "{{ cs.myip }}";
+</script>
+<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,54 @@
+
+
+
+
+
+        <table id="trace" >
+            <tr>
+                <td >
+                    <h2>Can - Trace:</h2>
+                </td>
+
+            <tr>
+                <td>
+                    {% for log in cs.log_message %}
+                        {{ log }}<br>
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+    
+
+
+
+
+<!-- <table width="800px">
+    <tr>
+        <td colspan="3">
+            <h2>Sensorwerte:</h2>
+        </td>
+    </tr>
+    <tr>
+    {% for key, value in cs.decodedvalue.items() %}
+        <tr>
+            <td style="width: 200px;">
+                {{key}}:
+            </td>
+            <td class="tdleft" style="width: 200px;">
+                    <strong>{{ value }}</strong>
+            </td>
+            <td>
+                {{ cs.comments[key] }}
+            </td>
+        </tr>
+    {% endfor %}
+</table> -->
+
+
+
+
+
+
+
+
+                

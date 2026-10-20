@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="static/style.css">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Canlogger</title>
+      
+    </head>
+    <body style= "background-color: #313131;">
+    
+        <!-- Download-Links für jede Datei -->
+
+            <h2>Download-Dateien:</h2>
+            <ul>
+                {% for file in cs.filelist %}
+                    {% if not file.endswith('bus_log.xml') %}
+                        <li> <a href="{{ url_for('downloadfile', filename= file) }}"> {{file}} </a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+
+        <form method="POST" action="/writeconfig" style="text-align: center; margin-top: 20px;">
+        <button type="submit" name="delete"  onclick="return confirm('Achtung alle Daten werden gelöscht!. Fortfahren?')" style="background-color:red">Dateiverzeichnis aufräumen       
+        </button> 
+        </form>
+
+
+
+
+
+
+    </body>
+</html>
+
+

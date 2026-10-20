@@ -1,0 +1,293 @@
+VERSION ""
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_:
+
+
+BO_ 822 IOLink336: 8 Vector__XXX
+ SG_ EC_8_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_8_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_8_3 : 48|16@0+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 821 IOLink335: 8 Vector__XXX
+ SG_ EC_7_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_7_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_7_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_7_3 : 48|16@0+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 820 IOLink334: 8 Vector__XXX
+ SG_ EC_6_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_6_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_6_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_6_3 : 48|16@0+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 819 IOLink333: 8 Vector__XXX
+ SG_ EC_5_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_5_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_5_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_5_3 : 48|16@0+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 818 IOLink332: 8 Vector__XXX
+ SG_ EC_4_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_4_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_4_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_4_3 : 48|16@0+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 817 IOLink331: 8 Vector__XXX
+ SG_ EC_3_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_3_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_3_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_3_3 : 48|16@0+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 816 IOLink330: 8 Vector__XXX
+ SG_ EC_7_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_7_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_7_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ EC_7_3 : 48|16@0+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 815 IOLink32F: 8 Vector__XXX
+ SG_ R_8_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_8_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_8_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_8_3 : 48|16@1+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 814 IOLink32E: 8 Vector__XXX
+ SG_ R_7_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_7_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_7_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_7_3 : 48|16@1+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 813 IOLink32D: 8 Vector__XXX
+ SG_ R_6_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_6_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_6_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_6_3 : 48|16@1+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 812 IOLink32C: 8 Vector__XXX
+ SG_ R_5_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_5_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_5_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_5_3 : 48|16@1+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 811 IOLink32B: 8 Vector__XXX
+ SG_ R_4_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_4_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_4_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_4_3 : 48|16@1+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 810 IOLink32A: 8 Vector__XXX
+ SG_ R_3_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_3_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_3_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_3_3 : 48|16@1+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 809 IOLink329: 8 Vector__XXX
+ SG_ R_2_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_2_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_2_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_2_3 : 48|16@1+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 808 IOLink328: 8 Vector__XXX
+ SG_ R_1_0 : 0|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_1_1 : 16|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_1_2 : 32|16@1+ (1,0) [0|65535] "°" Vector__XXX
+ SG_ R_1_3 : 48|16@1+ (1,0) [0|65535] "°" Vector__XXX
+
+BO_ 807 IOLink327: 8 Vector__XXX
+ SG_ RFC_8 : 0|14@1+ (0.02197265625,0) [0|360] "°" Vector__XXX
+
+BO_ 806 IOLink326: 8 Vector__XXX
+ SG_ RFC_7_0 : 0|14@1+ (0.02197265625,0) [0|360] "°" Vector__XXX
+ SG_ RFC_7_1 : 16|14@1+ (0.02197265625,0) [0|360] "°" Vector__XXX
+
+BO_ 805 IOLink325: 8 Vector__XXX
+ SG_ RFC_6 : 0|14@1+ (0.02197265625,0) [0|360] "°" Vector__XXX
+
+BO_ 804 IOLink324: 8 Vector__XXX
+ SG_ RFC_5 : 0|14@1+ (0.02197265625,0) [0|360] "°" Vector__XXX
+
+BO_ 803 IOLink323: 8 Vector__XXX
+ SG_ RFC_4 : 0|14@1+ (0.02197265625,0) [0|360] "°" Vector__XXX
+
+BO_ 801 IOLink321: 8 Vector__XXX
+ SG_ RFC_3 : 0|14@1+ (0.02197265625,0) [0|360] "°" Vector__XXX
+
+BO_ 802 IOLink322: 8 Vector__XXX
+ SG_ RFC_2 : 0|14@1+ (0.02197265625,0) [0|360] "°" Vector__XXX
+
+BO_ 800 IOLink320: 8 Vector__XXX
+ SG_ RFC_1 : 0|14@1+ (0.02197265625,0) [0|360] "°" Vector__XXX
+
+BO_ 700 Temperatur: 4 Vector__XXX
+ SG_ TUMG_Mobil : 16|16@1+ (1,-50) [-50|150] "" Vector__XXX
+
+BO_ 385 Ch01: 7 Vector__XXX
+ SG_ Ch1_0 : 0|16@1+ (0.005493,0) [0|360] "°" Vector__XXX
+ SG_ Ch1_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 386 Ch2: 7 Vector__XXX
+ SG_ Ch2_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch2_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 387 Ch3: 7 Vector__XXX
+ SG_ Ch3_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch3_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 388 Ch4: 7 Vector__XXX
+ SG_ Ch4_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch4_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 389 Ch5: 7 Vector__XXX
+ SG_ Ch5_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch5_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 390 Ch6: 7 Vector__XXX
+ SG_ Ch6_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch6_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 391 Ch7: 7 Vector__XXX
+ SG_ Ch7_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch7_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 392 Ch8: 7 Vector__XXX
+ SG_ Ch8_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch8_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 393 Ch9: 7 Vector__XXX
+ SG_ Ch9_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch9_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 394 Ch10: 7 Vector__XXX
+ SG_ Ch10_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch10_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 395 Ch11: 7 Vector__XXX
+ SG_ Ch11_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch11_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 396 Ch12: 7 Vector__XXX
+ SG_ Ch12_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch12_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 397 Ch13: 7 Vector__XXX
+ SG_ Ch13_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch13_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 398 Ch14: 7 Vector__XXX
+ SG_ Ch14_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch14_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 399 Ch15: 7 Vector__XXX
+ SG_ Ch15_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch15_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 400 Ch26: 7 Vector__XXX
+ SG_ Ch26_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch26_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 401 Ch17: 7 Vector__XXX
+ SG_ Ch17_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch17_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 402 Ch1: 7 Vector__XXX
+ SG_ Ch18_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch18_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 403 Ch18: 7 Vector__XXX
+ SG_ Ch18_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch18_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 404 Ch19: 7 Vector__XXX
+ SG_ Ch19_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch19_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 405 Ch20: 7 Vector__XXX
+ SG_ Ch20_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch20_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 406 Ch21: 7 Vector__XXX
+ SG_ Ch21_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch21_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 407 Ch22: 7 Vector__XXX
+ SG_ Ch22_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch22_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 408 Ch23: 7 Vector__XXX
+ SG_ Ch23_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch23_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 409 Ch24: 7 Vector__XXX
+ SG_ Ch24_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch24_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 410 Ch25: 7 Vector__XXX
+ SG_ Ch25_0 : 0|16@1+ (0.005493,0) [0|360] "ï¿½" Vector__XXX
+ SG_ Ch25_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+BO_ 511 Ch127: 7 Vector__XXX
+ SG_ Ch127_0 : 0|16@1+ (0.005493,0) [0|360] "°" Vector__XXX
+ SG_ Ch127_1 : 16|8@1+ (1,0) [0|44] "Turn" Vector__XXX
+
+
+
+CM_ SG_ 700 TUMG_Mobil "Umgebungstemperatur Klimaschrank Mobil";
+CM_ SG_ 385 Ch1_0 "Winkel in Â° NodeID 1";
+CM_ SG_ 385 Ch1_1 "Anzahl Umdrehungen NodeID 1";
+CM_ SG_ 386 Ch2_0 "Winkel in Â° NodeID 2";
+CM_ SG_ 386 Ch2_1 "Anzahl Umdrehungen NodeID 2";
+CM_ SG_ 387 Ch3_0 "Winkel in Â° NodeID 3";
+CM_ SG_ 387 Ch3_1 "Anzahl Umdrehungen NodeID 3";
+CM_ SG_ 388 Ch4_0 "Winkel in Â° NodeID 4";
+CM_ SG_ 388 Ch4_1 "Anzahl Umdrehungen NodeID 4";
+CM_ SG_ 389 Ch5_0 "Winkel in Â° NodeID 5";
+CM_ SG_ 389 Ch5_1 "Anzahl Umdrehungen NodeID 5";
+CM_ SG_ 390 Ch6_0 "Winkel in Â° NodeID 6";
+CM_ SG_ 390 Ch6_1 "Anzahl Umdrehungen NodeID 6";
+CM_ SG_ 391 Ch7_0 "Winkel in Â° NodeID 7";
+CM_ SG_ 391 Ch7_1 "Anzahl Umdrehungen NodeID 7";
+CM_ SG_ 392 Ch8_0 "Winkel in Â° NodeID 8";
+CM_ SG_ 392 Ch8_1 "Anzahl Umdrehungen NodeID 8";
+CM_ SG_ 393 Ch9_0 "Winkel in Â° NodeID 9";
+CM_ SG_ 393 Ch9_1 "Anzahl Umdrehungen NodeID 9";
+CM_ SG_ 394 Ch10_0 "Winkel in Â° NodeID 10";
+CM_ SG_ 394 Ch10_1 "Anzahl Umdrehungen NodeID 10";
+CM_ SG_ 395 Ch11_0 "Winkel in Â° NodeID 11";
+CM_ SG_ 395 Ch11_1 "Anzahl Umdrehungen NodeID 11";
+CM_ SG_ 396 Ch12_0 "Winkel in Â° NodeID 12";
+CM_ SG_ 396 Ch12_1 "Anzahl Umdrehungen NodeID 12";
+CM_ SG_ 511 Ch127_0 "Winkel in Grad Node ID127, Sensor 1";
+CM_ SG_ 511 Ch127_1 "Aktuelle Umdrehung von maximal 44 ";
+
