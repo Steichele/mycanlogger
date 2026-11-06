@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CanopenLogger</title>
     <link rel="stylesheet" href="{{cs.css}}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <!-- <img src="static/Novotechnik.gif" alt="Overlay GIF" class="overlay-image"> -->
@@ -228,7 +230,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <div id="status" width = "100%" >  
+                        <div id="status" width = "800px" >  
                             {% if cs.findsensor_running == True %}
                             <img src="{{url_for('static', filename='spinner.gif')}}"><br>
                             {% endif %}
@@ -270,6 +272,28 @@
                         </button>
                         </div>
 
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    <center>
+                        <table align="center" width="100%">
+                            <tr>
+                                <td>
+                                    <div style="text-align: center;">
+                                        <button id="togglePlot">
+                                            Plot show/hide
+                                        </button>
+                                    </div>
+                                    <br>
+                                <!-- </td>
+                                <td> -->
+                                    <h2>Trend:</h2>
+                                    <div id="plotly-div" style="width: 150%; height:150% ; text-align: right;"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
                     </td>
                 </tr>
                 <tr>
@@ -334,15 +358,15 @@
             <div id ="files">
                 <ul>
                     {% for file in cs.filelist %}
-                        {% if not (cs.decodedvalue.keys()|length <= 0.5) %}
-                            {% if not file.endswith('.xml') %}
+                        <!-- {% if not (cs.decodedvalue.keys()|length <= 0.5) %}
+                            {% if not file.endswith('.xml') %} -->
                                 <li> <a href="{{ url_for('downloadfile', filename= file) }}"> {{file}} </a></li>
-                            {% endif %}
-                        {% else %}
-                            {% if not file.endswith('.ready') %}
+                            <!-- {% endif %}
+                        {% else %} -->
+                            <!-- {% if not file.endswith('.ready') %} -->
                                 <li> <a href="{{ url_for('downloadfile', filename= file) }}"> {{file}} </a></li>
-                            {% endif %}
-                        {% endif %}
+                            <!-- {% endif %} -->
+                        <!-- {% endif %} -->
                     {% endfor %}
                 </ul>
             </div>
@@ -373,3 +397,42 @@
 
 </body>
 </html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="static/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/candied@2.1.0/dist-bundle/candied.js"></script>
+    <title>Decoded CAN Data Plot</title>
+</head>
+<body>
+    <center>
+        <table align="center" width="100%">
+            <tr>
+                <td>
+                    <h2>Trend:</h2>
+                    <div id="plotly-div"style=" width:95%; height:700px; margin:0 auto;"></div>
+                    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
+                        <a href="http://{{ cs.myip }}:8081">zurück zum WebInterface</a>
+                    </center>
+                </td>
+            </tr>
+        </table>
+    </center>
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}"> </script>
+<script type="text/javascript"> 
+    const myip = "{{ cs.myip }}";
+</script>
+<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html> -->
+

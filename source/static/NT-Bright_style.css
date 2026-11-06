@@ -58,6 +58,7 @@ table {
     position: relative;
     z-index: 1;
     color: #ffffff;
+    table-layout: fixed;
 }
 
 table, th, td {
@@ -65,6 +66,7 @@ table, th, td {
     border-radius: 1.25rem;
     font-size: large;
     vertical-align: top;
+    table-layout: fixed;
 }
 
 th, td,
@@ -79,10 +81,12 @@ th, td,
 
 #decodedtable tr:nth-child(even) {
     filter: brightness(80%);
+    table-layout: fixed;
 }
 
 #decodedtable tr:nth-child(odd) {
     filter: brightness(140%);
+    table-layout: fixed;
 }
 
 /* Formulare */
@@ -218,4 +222,15 @@ label {
     top: 1.875rem;
     right: 9.375rem;
     padding: 0.625rem;
+}
+#plotly-div {
+    width: 1200px !important;
+    min-width: 1200px;
+    max-width: 1200px;
+
+    height: 700px !important;
+    min-height: 700px;
+    max-height: 700px;
+
+    overflow: hidden;
 }
