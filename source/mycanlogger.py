@@ -142,7 +142,6 @@ class CANTracer:
     def mesg_updater(self, msg):
         '''pipes data from Tracer to mdf writer'''
         self.msg = msg
-        self.listupdater(msg)
         if not self.arithmetikupdater == None:
             self.arithmetikupdater(msg)
         if not self.settingchangerupdater == None:
@@ -190,9 +189,9 @@ class CANTracer:
         return elem
 
     
-    def listupdater(self, msg):
-        self.log_message_list.append(msg)
-        self.log_message_list = self.log_message_list[-50:]
+    # def listupdater(self, msg):
+    #     self.log_message_list.append(msg)
+    #     self.log_message_list = self.log_message_list[-50:]
 
     def viewer(self,bus):
         '''update livedata'''
@@ -676,7 +675,7 @@ class Settingchanger:
         self.caninterface = None
         self.interfacechannel = None
         self.dlfile = "canconfig.xml" 
-        self.log_message = []
+        self.log_message = deque(maxlen=30)
         self.sensorid = None
         self.startstoptrace = 0
         self.increment = 80
@@ -742,6 +741,7 @@ class Settingchanger:
         self.last_access = 0
         self.plotreading = False
         self.lastSensordict = None
+        self.linmessungRunning = False
 
         
     def write_heartbeat(self,data):  
@@ -842,15 +842,12 @@ class Settingchanger:
         return df
             
     def display_recive_loop(self,msg):
-        # t = Thread(target=self.can_logger, args=(msg,))
-        # t.start()
         self.can_logger(msg)
 
 
     def trace(self):
         ''' Startet den Notifier 
         '''
-        # self.log_message = self.tracer.log_message_list[-20:]
         try:
             if not self.tracer:
                 self.tracer = CANTracer()
@@ -858,7 +855,6 @@ class Settingchanger:
             if self.bus:
                 v = Thread(target=self.tracer.viewer, args=(self.bus,), daemon=True)
                 v.start()
-            # self.makePlotObject()
         except Exception as e:
             self.getstatus(e)
         return render_template('temp.html', cs=self)
@@ -967,12 +963,11 @@ class Settingchanger:
         self.app.add_url_rule('/', view_func=self.index, methods=['GET', 'POST'])
         self.app.add_url_rule('/download', view_func=self.downloadfile, methods=['GET'])
         self.app.add_url_rule('/config', view_func=self.config, methods=['GET', 'POST'])
-        self.app.add_url_rule('/writeconfig', view_func=self.writeconfig, methods=['GET', 'POST'])
+        # self.app.add_url_rule('/writeconfig', view_func=self.writeconfig, methods=['GET', 'POST'])
         self.app.add_url_rule('/trace', view_func=self.trace)
         self.app.add_url_rule('/calc', view_func=self.calc, methods=['POST', 'GET'])
-        self.app.add_url_rule('/plot', view_func=self.plot, methods=['POST', 'GET'])
         self.app.add_url_rule('/plotdata', view_func=self.plotdata, methods=['POST', 'GET'])
-
+        self.app.add_url_rule('/numdata', view_func=self.getNumObject, methods=['POST', 'GET'])
 
     def can_logger(self,msg):
         ''' Füllt die Liste der Cannachrichten für das Trace Fenster 
@@ -981,6 +976,7 @@ class Settingchanger:
         signalcounter = 0
         if msg:
             try:
+                self.log_message.append(msg)
                 decoded = self.candb.decode_message(msg.arbitration_id, msg.data)
                 message = self.candb.get_message_by_frame_id(msg.arbitration_id)
                 timestamp = msg.timestamp
@@ -1007,66 +1003,71 @@ class Settingchanger:
         if self.plotreading == False:
             try:
                 if name not in self.decodedDict:
-                    # self.decodedDict[name] = {"unit": unit, "data": deque(maxlen=self.plotLength*100)}
-                    self.decodedDict[name] = {"unit": unit, "data": deque(maxlen=self.plotLength*10)}
+                    self.decodedDict[name] = {"unit": unit, "data": deque(maxlen=self.plotLength)}
                 else:
                     self.decodedDict[name]["data"].append((timestamp, value))
             except:
                 pass
 
-    def getPlotObject(self):
+
+    def getNumObject(self):
+        numlist = [] 
         self.plotreading = True
         decodedDict = self.decodedDict.copy()
-
-        try:
-            for signal, sigdata in decodedDict.items():
-                new_x = [t for t, v in sigdata["data"]]
-                new_y = [v for t, v in sigdata["data"]]
-                
-                # In der Liste nach dem Eintrag mit dem passenden Namen suchen
-                existing_trace = next((trace for trace in self.plotlylist if trace.get("name") == signal), None)
-                
-                if existing_trace:
-                    # Gefunden -> Daten an die existierende Standard-Liste anhängen
-                    existing_trace["x"].extend(new_x[-self.plotLength:])
-                    existing_trace["y"].extend(new_y[-self.plotLength:])
-                    
-                    # Begrenzen, um unendliches Wachstum zu verhindern
-                    existing_trace["x"] = existing_trace["x"][-self.plotLength:]
-                    existing_trace["y"] = existing_trace["y"][-self.plotLength:]
-                else:
-                    # Nicht gefunden (oder Liste leer) -> Neuen Trace an Liste anhängen
-                    self.plotlylist.append({
-                        "x": new_x,
-                        "y": new_y,
-                        "mode": "lines",
-                        "name": signal,
-                        "unit": sigdata.get("unit")
-                    })
-        except Exception as e:
-            self.getstatus(e)
-        self.decodedDict = {}
         self.plotreading = False
+        for signal, sigdata in decodedDict.items():
+            if sigdata.get("data"):
+                last_entry = sigdata["data"][-1]
+                x = [last_entry[0]]
+                y = [last_entry[1]]
+                numlist.append({
+                    "x": x,
+                    "y": y,
+                    "mode": "lines",
+                    "name": signal,
+                    "unit": sigdata.get("unit")
+                })
+        return numlist
+        
+    def getPlotObject(self):
+        if not self.plotreading == True:
+            self.plotreading = True
+            decodedDict = self.decodedDict.copy()
+            for key,_ in decodedDict.items():
+                self.decodedDict.pop(key)
+            self.plotreading = False
+
+            try:
+                for signal, sigdata in decodedDict.items():
+                    new_x = [t for t, v in sigdata["data"]]
+                    new_y = [v for t, v in sigdata["data"]]
+                    
+                    # In der Liste nach dem Eintrag mit dem passenden Namen suchen
+                    existing_trace = next((trace for trace in self.plotlylist if trace.get("name") == signal), None)
+                    
+                    if existing_trace:
+                        # Gefunden -> Daten an die existierende Standard-Liste anhängen
+                        existing_trace["x"].extend(new_x[-self.plotLength:])
+                        existing_trace["y"].extend(new_y[-self.plotLength:])
+                        
+                        # Begrenzen, um unendliches Wachstum zu verhindern
+                        existing_trace["x"] = existing_trace["x"][-self.plotLength:]
+                        existing_trace["y"] = existing_trace["y"][-self.plotLength:]
+                    else:
+                        # Nicht gefunden (oder Liste leer) -> Neuen Trace an Liste anhängen
+                        self.plotlylist.append({
+                            "x": new_x,
+                            "y": new_y,
+                            "mode": "lines",
+                            "name": signal,
+                            "unit": sigdata.get("unit")
+                        })
+            except Exception as e:
+                self.getstatus(e)
         return self.plotlylist
 
-    def makePlotObject(self):
-        self.plotreading = True
-        try:
-            # plotlylist = [{"x": [t for t, v in sigdata["data"]], "y": [v for t, v in sigdata["data"]], "mode": "lines", "name": signal, "unit": sigdata.get("unit") } for signal, sigdata in self.decodedDict.items()]
-            plotlylist = [{"x": [], "y": [], "mode": "lines", "name": signal, "unit": sigdata.get("unit") } for signal, sigdata in self.decodedDict.items()]
-            self.plotlylist = plotlylist.copy()
-        except:
-            self.getstatus(f"länge des Plots wird auf {self.plotLength} gekürzt . . ")
-        self.plotreading = False
-        return None
-
     def plotdata(self):
-        return jsonify(self.getPlotObject())
-    
-    def plot(self):
-        return render_template("index.html", cs=self, plotgraph=self.makePlotObject())
-
-    
+        return jsonify(self.getPlotObject())  
 
     def calc(self):
         ''' Handelt das Arithmetik Modul '''
@@ -1195,24 +1196,6 @@ class Settingchanger:
         except Exception as e:
             print(f"Fehler beim Auflisten der Dateien: {e}")
 
-    def writeconfig(self):
-        ''' Handelt das Dropdown der XML Konfigurationen
-        '''
-        self.listfiles()
-        if request.method == 'POST':
-            if 'selection' in request.form:
-                filename = str(self.getselection())
-                if filename:
-                    self.readxml(filename)
-                    self.dlfile = filename
-                    self.savefile = True
-                    self.getstatus(f"Datei {self.dlfile} bereit zum Download")
-            if 'writedataset' in request.form:
-                self.datasettosensor()
-            if 'delete' in request.form:
-                self.cleandir()
-                print("delete")
-        return render_template('index.html', cs=self)
     
     def getselection(self):
         ''' Dateiname des XML zurückgeben
@@ -1237,6 +1220,24 @@ class Settingchanger:
                 self.beschreibung = None
                 self.configfile = None
 
+    # def writeconfig(self):
+    #     ''' Handelt das Dropdown der XML Konfigurationen
+    #     '''
+    #     self.listfiles()
+    #     if request.method == 'POST':
+    #         if 'selection' in request.form:
+    #             filename = str(self.getselection())
+    #             if filename:
+    #                 self.readxml(filename)
+    #                 self.dlfile = filename
+    #                 self.savefile = True
+    #                 self.getstatus(f"Datei {self.dlfile} bereit zum Download")
+    #         if 'writedataset' in request.form:
+    #             self.datasettosensor()
+    #         if 'write' in request.form:
+    #             self.writeconfig()
+    #     return render_template('index.html', cs=self)
+
     def index(self):
         ''' reciving the commands from webinterface'''
         self.signal_data = {}
@@ -1251,19 +1252,26 @@ class Settingchanger:
             self.upload_dbc()
         if 'hwsetup' in request.form:
             self.config_hw()
-        if 'write' in request.form:
-            self.writeconfig()
+        # if 'write' in request.form:
+        #     self.writeconfig()
         if 'sstrace' in request.form:
             self.sstrace()
+        if 'delete' in request.form:
+            self.cleandir()
+   
+        
         return render_template('index.html', cs=self)
      
     def config_hw(self):
         ''' configure the caninterface '''
-        try:    
+        try:
+            if not self.blfloggerrunning == True:    
+                self.tracer = None
             hw = request.form['canhw']
             bitrate = request.form['bitrate']
             initlist = [hw, bitrate]
             self.inithw(initlist)
+            self.trace()
             self.getstatus(f"Treiber {request.form['canhw']} mit der Bitrate {request.form['bitrate']} eingestellt")
         except Exception as e:
             print(e)
@@ -1424,12 +1432,12 @@ class Settingchanger:
         if self.init == True:
             self.startstoptrace = self.startstoptrace + 1
             if self.startstoptrace == 2:
-                self.log_message = []
                 self.tracer.log_message_list = []
                 self.startstoptrace = 0
                 self.decodedvalue = {}
                 self.decodedDict = {}
-            self.trace()
+                self.plotlylist = []
+            # self.trace()
             
     def downloadfile(self):
         ''' filedownload selection '''
@@ -1474,9 +1482,6 @@ class Settingchanger:
         self.listfiles()
         return response
     
-    # def rechw(self,msg):
-    #     if self.savefile == True:
-    #         self.writexml(msg)
     
     def update_baudrate_list(self):
         baudrates = [250000, 500000, 125000, 10000, 20000, 50000, 800000, 1000000] # Die Reihenfolge der Baudraten ist nach der Häufigkeit bei NT Produkten sortiert 
@@ -1716,6 +1721,7 @@ class Settingchanger:
             self.getstatus("Opmode nicht möglich. Sendecycle und Baudrate korrekt eingestellt?")
 
     def execute_startlogger(self, header, fn=None):
+        self.plotreading = True
         if self.blfloggerrunning == False:
             try:
                 self.init == True
@@ -1740,8 +1746,10 @@ class Settingchanger:
                 self.blfloggerrunning = False
         else:
             self.getstatus("Es wird bereits eine Messung aufgezeichnet . .")
+        self.plotreading = False
 
     def execute_stoplogger(self):
+        self.plotreading = True
         def setLoggerrunning():
             self.blfloggerrunning = False
             return
@@ -1751,12 +1759,10 @@ class Settingchanger:
                 self.startstoptrace = 0
                 self.tracer.header = self.header
                 self.getstatus("Messung gestopt, MDF wird erstellt...")
-                self.log_message = self.tracer.logmessage
                 setflag = Thread(target=setLoggerrunning, args=())
                 setflag.start()
                 # setLoggerrunning()
                 self.tracer.cleanup()
-                self.getstatus(self.tracer.logmessage)
                 self.listfiles()
                 self.heartbeat()#enables Autoeinlagern im Datastorage
                 t = Thread(target=self.upload_file, args=())
@@ -1766,6 +1772,8 @@ class Settingchanger:
                 self.blfloggerrunning = True
         else:
             self.getstatus("Es ist keine Messung aktiv . .")
+        time.sleep(0.5)
+        self.plotreading = False
 
     def execute_read_sdo(self, ids):
         exit = False
@@ -1792,27 +1800,36 @@ class Settingchanger:
         self.reset206()
         return
 
+    def fireoffset(self, offset):
+        for _ in range(10):
+            self.send_to_can(0x65,int(offset*100))
+            time.sleep(0.1)
 
     def excecute_lin(self, cmddict=None):
         try:
             self.init_lin_environment(cmddict)
             mot = self.init_motor()
             mot.run()
+            offset = self.get_offset(mot)
+            off = Thread(target=self.fireoffset, args=(offset,))
+            off.start()
             autostart, filename = self.prepare_measurement(cmddict)
             self.run_measurement(mot)
-            self.getstatus(f"Autoauswertung = {autostart}, Filename = {filename}")
+            self.getstatus(f"Autoauswertung? {autostart}")
             if autostart:
                 self.handle_measurement_result(filename, str(mot.kabelabgang))
+            self.linmessungRunning = False
         except Exception as e:
-            self.getstatus(f"Fehler beim Starten des LIN-Tests: {e}")
-
+            try:
+                mot.goto_kabelabgang()
+            except:
+                self.getstatus(f"Fehler beim Starten des LIN-Tests: {e} Position Kabelabgang kann nicht angefahren werden")
+            self.getstatus(f"Fehler beim Starten des LIN-Tests: {e} Vorgang abgebrochen")
+            return None
 
     def init_lin_environment(self, cmddict):
-        # self.getstatus("Caninterface wird initialisiert")
-        # self.inithw(["socketcan", "250000"])
-        # self.trace()
-        time.sleep(1)
         if not cmddict:
+            self.getstatus(f"Lin Abbruch")
             return
         cmddict["cycle"] = 10
         self.execute_find(cmddict)
@@ -1822,10 +1839,11 @@ class Settingchanger:
         opmode = Thread(target=self.execute_opmode,args=(cmddict,))
         opmode.start()
 
-
     def init_motor(self):
         self.getstatus("Stepper wurde gestartet . . .")
         uart = self.setup_serial()
+        if not uart:
+            raise RuntimeError("Kein Gerät angeschlossen") 
         stepper = Thread(target=self.read_stepper, args=())
         stepper.start()
         time.sleep(3)
@@ -1834,6 +1852,9 @@ class Settingchanger:
         self.getstatus("Motorsteuerung initialisiert . . .")
         return mot
 
+    def get_offset(self,mot):
+        offset = mot.get_sensor_pos_from_decoded()
+        return offset
 
     def prepare_measurement(self, cmddict):
         measure = True
@@ -1849,7 +1870,8 @@ class Settingchanger:
         autostart = False
         filename = None
         if self.serial:
-            self.blfFile = f"Sn_{self.serial}"
+            tstamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            self.blfFile = f"Sn_{self.serial}_{tstamp}"
         if measure:
             self.execute_startlogger(cmddict["header"],self.blfFile)
             autostart = True
@@ -1861,9 +1883,6 @@ class Settingchanger:
 
     def run_measurement(self, mot):
         mot.messung()
-        # motmeasure = Thread(target=mot.messung, daemon=True)
-        # motmeasure.start()
-        # motmeasure.join()
 
 
     def handle_measurement_result(self, filename, kabelabgang):
@@ -1883,15 +1902,15 @@ class Settingchanger:
                     href = link["href"]
                     if ".mf4" in href.lower():
                         mf4_url = urljoin(url, href)
-                        self.getstatus(f"Download: {mf4_url}")
-                        with requests.get(mf4_url, stream=True) as r:
-                            r.raise_for_status()
-                            filename = mf4_url.split("/")[-1]
-                            filepath = os.path.join("uploads", filename)
-                            with open(filepath, "wb") as fp:
-                                for chunk in r.iter_content(8192):
-                                    fp.write(chunk)
-                                dl = True
+                self.getstatus(f"Download: {mf4_url}")
+                with requests.get(mf4_url, stream=True) as r:
+                    r.raise_for_status()
+                    filename = mf4_url.split("/")[-1]
+                    filepath = os.path.join("uploads", filename)
+                    with open(filepath, "wb") as fp:
+                        for chunk in r.iter_content(8192):
+                            fp.write(chunk)
+                        dl = True
                 self.getstatus(f"Datei: {filename} wurde runtergeladen Auswertung wird gestartet")
                 try: 
                     subprocess.run(["python", "linschrieb.py", "-f", filepath, "-e", "-k", kabelabgang],check=True, cwd="/home/pi/mycanlogger")
@@ -2032,6 +2051,8 @@ class Settingchanger:
 
     def read_digitemp(self):
         dev = self.setup_serial()
+        if not dev:
+            raise RuntimeError("Kein Gerät angeschlossen") 
         with open(f"{dev}", 'rb', buffering=0) as ser:
             while True:
                 try:
@@ -2049,64 +2070,70 @@ class Settingchanger:
     
     def read_stepper(self):
         dev = self.setup_serial()
+        if not dev:
+            raise RuntimeError("Kein Gerät angeschlossen") 
         HEADER = b"\x12\x34\x56\x78"
         poslist = [0,1,0,0,0]
         pos = 0
-        with open("log.log", "a") as log:
-            with open(dev, "rb", buffering=0) as ser:
-                last = -1
-                buf = bytearray()
-                while True:
-                    try:
-                        chunk = ser.read(64)
-                        if not chunk:
-                            continue
-                        buf.extend(chunk)
-                        while True:
-                            idx1 = buf.find(HEADER)
-                            if idx1 < 0:
-                                buf = buf[-3:]
-                                break
-                            idx2 = buf.find(HEADER, idx1 + len(HEADER))
-                            if idx2 < 0:
-                                break
-                            payload = buf[idx1 + len(HEADER):idx2]
-                            #
-                            # Normales Format:
-                            # LOW HIGH
-                            #
-                            if len(payload) == 2:
-                                pos = payload[0] | (payload[1] << 8)             
-                            elif len(payload) == 3: # Sonderfall:LOW FILLER HIGH
-                                pos = payload[0] | (payload[2] << 8)
+        # with open("log.log", "a") as log:
+        with open(dev, "rb", buffering=0) as ser:
+            last = -1
+            buf = bytearray()
+            self.linmessungRunning = True
+            while self.linmessungRunning == True:
+                try:
+                    chunk = ser.read(64)
+                    if not chunk:
+                        continue
+                    buf.extend(chunk)
+                    while True:
+                        idx1 = buf.find(HEADER)
+                        if idx1 < 0:
+                            buf = buf[-3:]
+                            break
+                        idx2 = buf.find(HEADER, idx1 + len(HEADER))
+                        if idx2 < 0:
+                            break
+                        payload = buf[idx1 + len(HEADER):idx2]
+                        #
+                        # Normales Format:
+                        # LOW HIGH
+                        #
+                        if len(payload) == 2:
+                            pos = payload[0] | (payload[1] << 8)             
+                        elif len(payload) == 3: # Sonderfall:LOW FILLER HIGH
+                            pos = payload[0] | (payload[2] << 8)
 
-                            #     del buf[:idx2]
-                            #     continue
-                            #
-                            # Bekannten Störer ignorieren
-                            #
-                            if pos == 2573:
-                                del buf[:idx2]
-                                continue
-                            if abs(pos - last) > 10   or min(poslist) == max(poslist):
-                                self.send_to_can(100, pos)
-                                last = pos
-                            poslist.append(int(pos))
-                            poslist = poslist[-20:]
-                            # if last >= 0 and pos < last:
+                        #     del buf[:idx2]
+                        #     continue
+                        #
+                        # Bekannten Störer ignorieren
+                        #
+                        if pos == 2573:
                             del buf[:idx2]
-                    except Exception as e:
-                        self.getstatus(f"Fehler {e} beim lesen des Steppers")
+                            continue
+                        if abs(pos - last) > 10   or min(poslist) == max(poslist):
+                            self.send_to_can(100, pos)
+                            last = pos
+                        poslist.append(int(pos))
+                        poslist = poslist[-20:]
+                        # if last >= 0 and pos < last:
+                        del buf[:idx2]
+                except Exception as e:
+                    self.getstatus(f"Fehler {e} beim lesen des Steppers")
         
     def send_to_can(self,id,temp, humi = None):
-        tbytes = temp.to_bytes(2,byteorder='little')
-        if humi:
-            hbytes = humi.to_bytes(2,byteorder='little')
-            data = tbytes + hbytes
-        else:
-            data = tbytes
-        msg = can.Message(arbitration_id=id,data=data ,is_extended_id=False)
-        self.bus.send(msg)
+        try:
+            tbytes = temp.to_bytes(2,byteorder='little')
+            if humi:
+                hbytes = humi.to_bytes(2,byteorder='little')
+                data = tbytes + hbytes
+            else:
+                data = tbytes
+            msg = can.Message(arbitration_id=id,data=data ,is_extended_id=False)
+            self.bus.send(msg)
+        except:
+            pass
 
     def upload_file(self):
         try:
@@ -2194,7 +2221,7 @@ class Settingchanger:
 
 
 class MotorController:
-    def __init__(self, uart, parent, posname = "StepperPos", sensorname = "RFC_RFE_RSA_127_deg" , dir = None):
+    def __init__(self, uart, parent, posname = "StepperPos", sensorname = None , dir = None):
         self.uart = serial.Serial(uart, baudrate=115200, timeout=1)
         self.parent = parent
         self.decoded = None
@@ -2292,7 +2319,6 @@ class MotorController:
         except Exception as e:
             self.getstatus(f"Fehler beim Goto_Zero: {e}")   
         
-
     def send_to_motor(self, cmd):
         if self.uart is None:
             return False
@@ -2303,8 +2329,7 @@ class MotorController:
         except Exception as e:
             self.getstatus(f"Fehler beim Senden an den Motor:{e} , CMD: {cmd}")
             return False
-
-        
+   
     def set0(self):
         try:
             cmd = self.build_command("stepper0")
@@ -2336,7 +2361,7 @@ class MotorController:
             self.goto_kabelabgang()
         except Exception as e:
             self.getstatus(f"Fehler bei der Messung: {e}")
-            exit()
+            raise
 
     def getstatus(self, status):
         self.parent.status = status
@@ -2355,7 +2380,7 @@ class MotorController:
             self.getstatus(f"Kabelabgang: {self.kabelabgang}°")
             self.get_move_dir()
             time.sleep(1)
-            self.getstatus(f"Startposition: {self.pos}°, Sensorposition: {self.sensorpos}°, Kabelabgang: {self.kabelabgang}°, Richtung: {self.dir} Linmessung wird vorbereitet . . ")
+            self.getstatus(f"Startposition: 0°, Sensorposition: {self.sensorpos}°, Kabelabgang: {self.kabelabgang}°, Richtung: {self.dir} Linmessung wird vorbereitet . . ")
             self.goto_zero(degrees=self.kabelabgang-0.6, dir=self.downdir(), speedRPM=20)
             while self.get_sensor_pos_from_decoded() > 1:
                 self.goto_zero(degrees=self.sensorpos - 0.6, dir=self.downdir(), speedRPM=10)
@@ -2363,7 +2388,7 @@ class MotorController:
             self.set_timer()
         except Exception as e:
             self.getstatus(f"Fehler im MotorController: {e} System wird neu gestartet")
-            sys.exit()
+            raise
 
 def main():
     pass

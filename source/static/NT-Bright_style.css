@@ -6,11 +6,14 @@ html {
 body {
     font-family: Helvetica;
     font-size: 1rem;
-    color: #939388;
+    color: #808066;
     background-color: #000000;
     margin: 0;
     padding: 0;
+    /* height: 1920px;
+    width: 1080px; */
     height: 100%;
+    width: 100%;
 }
 
 /* Overlay-GIF */
@@ -48,7 +51,7 @@ h2 {
 /* Tabellen */
 table {
     border-collapse: collapse;
-    background-color: #939388;
+    background-color: #808066;
     border-radius: 0.3125rem;
     font-size: large;
     vertical-align: top;
@@ -58,7 +61,6 @@ table {
     position: relative;
     z-index: 1;
     color: #ffffff;
-    table-layout: fixed;
 }
 
 table, th, td {
@@ -66,7 +68,6 @@ table, th, td {
     border-radius: 1.25rem;
     font-size: large;
     vertical-align: top;
-    table-layout: fixed;
 }
 
 th, td,
@@ -80,13 +81,14 @@ th, td,
 .tdcenter { text-align: center; }
 
 #decodedtable tr:nth-child(even) {
-    filter: brightness(80%);
-    table-layout: fixed;
+    filter: brightness(100%);
+    font-size: 1rem;
 }
 
 #decodedtable tr:nth-child(odd) {
-    filter: brightness(140%);
-    table-layout: fixed;
+    /* background-color:#002D72; */
+    filter: brightness(100%);
+    font-size: 1rem;
 }
 
 /* Formulare */
@@ -223,14 +225,41 @@ label {
     right: 9.375rem;
     padding: 0.625rem;
 }
-#plotly-div {
-    width: 1200px !important;
-    min-width: 1200px;
-    max-width: 1200px;
 
-    height: 700px !important;
-    min-height: 700px;
-    max-height: 700px;
+#dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.625rem;
+}
 
-    overflow: hidden;
+.lcd-widget {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(0.25rem);
+    border: 0.125rem solid #000000;
+    border-radius: 0.9375rem;
+    padding: 0.625rem;
+    font-family: monospace;
+    min-height: 6.25rem;
+    cursor: move;
+    text-align: center;
+}
+
+.lcd-name {
+    color: #000;
+    font-size: 1.25rem;
+    text-align: center;
+}
+
+.lcd-value {
+    font-size: 1.25rem;
+    text-align: left;
+    /* margin-top: 0.9375rem; */
+    color: #000000;
+}
+
+.lcd-unit {
+    font-size: 1.25rem;
+    text-align: right;
+    /* margin-top: 1.25rem; */
+    color: #000000;
 }

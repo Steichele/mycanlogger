@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
     <title>CanopenLogger</title>
     <link rel="stylesheet" href="{{cs.css}}">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 </head>
 <body>
     <!-- <img src="static/Novotechnik.gif" alt="Overlay GIF" class="overlay-image"> -->
@@ -230,7 +231,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <div id="status" width = "800px" >  
+                        <div id="status" style=" width:100%; min-width:100%; max-width:100%; overflow:hidden;">
                             {% if cs.findsensor_running == True %}
                             <img src="{{url_for('static', filename='spinner.gif')}}"><br>
                             {% endif %}
@@ -262,7 +263,7 @@
                     <td>                
 
                         {% if cs.startstoptrace == 1 %}
-                        <div id="canData" style="width:1000px;">
+                        <div id="canData" style="width:70rem  ;">
 
                         </div>
                         <br>
@@ -277,7 +278,7 @@
                 <tr>
                     <td>
                     <center>
-                        <table align="center" width="100%">
+                        <table align="center" width="500rem">
                             <tr>
                                 <td>
                                     <div style="text-align: center;">
@@ -289,7 +290,7 @@
                                 <!-- </td>
                                 <td> -->
                                     <h2>Trend:</h2>
-                                    <div id="plotly-div" style="width: 150%; height:150% ; text-align: right;"></div>
+                                    <div id="plotly-div" style="width: 100rem;" ></div>
                                 </td>
                             </tr>
                         </table>
@@ -298,42 +299,54 @@
                 </tr>
                 <tr>
                     <td>
-                        <div id="decoded">
-                            <table id="decodedtable">
-                                <tr>
-                                    <td colspan="3">
-                                        <h2>Sensorwerte:</h2>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="tdright"> Signalname </th> <th class="tdright"> Value </th> <th class="tdright"> Signalcoment </th>
-                                </tr>
-                                {% for key, value in cs.decodedvalue.items() %}
-                                <tr>
-                                    <td class="tdright">
-                                        {{key}}:
-                                    </td>
-                                    <td class="tdright" style="width: 100px;" >
-                                        <strong>{{ value }}</strong>
-                                    </td>
-                                    <td class="tdright" style="width: 600px;">
-                                        {% if cs.comments[key] + '.xml' in cs.filelist %}
-                                        <a href="{{ url_for('downloadfile', filename= cs.comments[key]) }}.xml"> {{cs.comments[key]}}.xml </a>
-                                        {% else %}
-                                        {{cs.comments[key]}}
-                                        {% endif %}
-                                        
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                                <tr>
-                                    <td colspan="3" style="text-align: center;">
-                                        <a href="http://{{ cs.myip }}:8081/calc">Arithmetisches Signal hinzufügen</a><br>
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                        </div>
+                                            <!-- <div id="decoded"> -->
+                        <table id="decodedtable" width="100%">
+                        <tr>
+                            <td colspan="3">
+                                <h2>Sensorwerte:</h2>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3">
+
+                                <!-- <div style="display:flex; gap:10px;">
+
+                                    <div style="width:1000px;">
+                                        <h4>Signale</h4>
+                                        <ul id="signal-list"></ul>
+                                    </div>
+
+                                    <div style="flex-grow:1;">
+                                        <div id="gauges"></div>
+                                    </div>
+
+                                </div> -->
+                                <div id="dashboardContainer">
+                                    <div id="dashboard"></div>
+                                    
+                                    
+                                    <!-- <button onclick="addWidget()">-->
+                                    <select id="signalSelect"></select>
+                                    <button id="addSignalBtn">
+                                        Signal hinzufügen
+                                    </button>
+
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" style="text-align:center;">
+                                <a href="http://{{ cs.myip }}:8081/calc">
+                                    Arithmetisches Signal hinzufügen
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+
+
                     {% endif %} 
                     </td>
             </tr>
@@ -371,7 +384,7 @@
                 </ul>
             </div>
 
-                <form method="POST" action="/writeconfig" style="text-align: center; margin-top: 20px;">
+                <form method="POST" action="/" style="text-align: center; margin-top: 20px;">
                 <button type="submit" name="delete"  onclick="return confirm('Achtung alle Daten werden gelöscht!. Fortfahren?')" style="background-color:red">Dateiverzeichnis aufräumen       
                 </button> 
                 </form>
@@ -387,8 +400,7 @@
 </td>
 </tr>
 </table>
-
-
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}"> </script>
 <script type="text/javascript"> 
     const myip = "{{ cs.myip }}";
@@ -398,41 +410,4 @@
 </body>
 </html>
 
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="static/style.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/candied@2.1.0/dist-bundle/candied.js"></script>
-    <title>Decoded CAN Data Plot</title>
-</head>
-<body>
-    <center>
-        <table align="center" width="100%">
-            <tr>
-                <td>
-                    <h2>Trend:</h2>
-                    <div id="plotly-div"style=" width:95%; height:700px; margin:0 auto;"></div>
-                    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <center>
-                        <a href="http://{{ cs.myip }}:8081">zurück zum WebInterface</a>
-                    </center>
-                </td>
-            </tr>
-        </table>
-    </center>
-    <script type="text/javascript" src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}"> </script>
-<script type="text/javascript"> 
-    const myip = "{{ cs.myip }}";
-</script>
-<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
-
-</body>
-</html> -->
 

@@ -1,16 +1,19 @@
 html {
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 /* Stil für den Body */
 body {
     font-family: Helvetica;
-    font-size: 1rem;
+    font-size: 0.8rem;
     color: #808066;
     background-color: #000000;
     margin: 0;
     padding: 0;
+    /* height: 1920px;
+    width: 1080px; */
     height: 100%;
+    width: 100%;
 }
 
 /* Overlay-GIF */
@@ -30,7 +33,7 @@ body {
 a {
     color: #FFC72C;
     text-decoration: none;
-    font-size: large;
+    font-size: small;
 }
 
 a:hover {
@@ -50,7 +53,7 @@ table {
     border-collapse: collapse;
     background-color: #808066;
     border-radius: 0.3125rem;
-    font-size: large;
+    font-size: small;
     vertical-align: top;
     padding: 0.625rem;
     border: 0.0625rem solid #ccc;
@@ -63,7 +66,7 @@ table {
 table, th, td {
     border: 0rem solid #535050;
     border-radius: 1.25rem;
-    font-size: large;
+    font-size: small;
     vertical-align: top;
 }
 
@@ -78,16 +81,14 @@ th, td,
 .tdcenter { text-align: center; }
 
 #decodedtable tr:nth-child(even) {
-    filter: brightness(20%);
-    font-size: 1rem;
+    filter: brightness(100%);
+    font-size: 0.8rem;
 }
 
-
-
 #decodedtable tr:nth-child(odd) {
-     /* background-color:#002D72; */
+    /* background-color:#002D72; */
     filter: brightness(100%);
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 /* Formulare */
@@ -107,7 +108,7 @@ button,
 input[type="submit"] {
     width: 15.625rem;
     height: 2.5rem;
-    font-size: 1rem;
+    font-size: 0.8rem;
     border-radius: 0.3125rem;
     border: 0.0625rem solid #ccc;
     padding: 0.3125rem 0.625rem;
@@ -117,7 +118,7 @@ input[type="submit"] {
 
 /* Stil für Datei-Upload */
 input[type="file"] {
-    font-size: 1rem;
+    font-size: 0.8rem;
     color: #f7f3f3;
     background-color: #313131;
     border: 0.0625rem solid #ccc;
@@ -174,7 +175,7 @@ label {
 }
 
 #decoded {
-    font-size: 1.1rem;
+    font-size: 0.88rem;
     font-family: Helvetica;
     align-items: center;
 }
@@ -186,7 +187,7 @@ label {
 
 #datenblatt a {
     text-align: center;
-    font-size: 1.4rem;
+    font-size: 1.12rem;
     font-weight: bold;
 }
 
@@ -195,12 +196,12 @@ label {
     width: 100%;
     border: none;
     overflow-y: hidden;
-    font-size: 1.4rem;
+    font-size: 1.12rem;
 }
 
 #status {
     text-align: center;
-    font-size: 1.4rem;
+    font-size: 1.12rem;
     font-weight: bold;
     color: #ffffff;
     padding: 0.625rem;
@@ -223,4 +224,113 @@ label {
     top: 1.875rem;
     right: 9.375rem;
     padding: 0.625rem;
+}
+
+#dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.625rem;
+    border: 0.125rem solid #000000;
+    border-radius: 0.9375rem;
+}
+
+.lcd-widget {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(0.25rem);
+    border: 0.125rem solid #000000;
+    border-radius: 0.9375rem;
+    padding: 0.625rem;
+    font-family: monospace;
+    min-height: 6.25rem;
+    cursor: move;
+    text-align: center;
+}
+
+.innerHTML {
+
+
+}
+
+.lcd-widget {
+    position: relative; /* Zwingend nötig, damit der Button im Widget bleibt */
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(0.25rem);
+    border: 0.125rem solid #000000;
+    border-radius: 0.9375rem;
+    padding: 0.625rem;
+    font-family: monospace;
+    min-height: 4.25rem;
+    cursor: move;
+    text-align: center;
+    
+}
+
+.lcd-widget .delete-btn {
+    /* position: absolute; */
+    /* top: 0.4rem;
+    right: 0.4rem; */
+    z-index: 5; /* Sorgt dafür, dass der Button immer klickbar im Vordergrund liegt */
+    
+    /* Globale Maße (15.625rem x 2.5rem) und Margin zurücksetzen */
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0.2rem 0.5rem;
+    
+    /* Farben (überschreibt das globale #002D72) */
+    background-color: rgba(0, 0, 0, 0.0);
+    color: #000000;
+    border: 0.125rem solid #000000; /* Dicke, Stil (solid) und Farbe (schwarz) */
+    border-radius: 0.6rem;
+    
+    /* Schrift */
+    /* font-family: monospace; */
+    font-size: 0.9rem;
+    line-height: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.lcd-widget .delete-btn:hover {
+    background-color: rgba(0, 0, 0, 0.5); 
+    color: #ffffff;
+}
+
+
+  
+
+.lcd-name {
+    color: #000;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.lcd-value {
+    font-size: 1.5rem;
+    text-align: left;
+    /* margin-top: 0.9375rem; */
+    color: #000000;
+}
+
+.lcd-unit {
+    font-size: 1.6rem;
+    text-align: right;
+    /* margin-top: 1.25rem; */
+    color: #000000;
+}
+.plotly-div {
+  width: 62.5rem;      /* entspricht 1000px bei 16px Basisgröße */
+  height: 43.75rem;    /* entspricht 700px bei 16px Basisgröße */
+    border: 0.125rem solid #000000;
+    border-radius: 0.9375rem;
+  overflow: hidden;    /* verhindert, dass Ecken über den Rahmen ragen */
+  box-sizing: border-box;
+}
+#plotly-div {
+  width: 62.5rem;      /* entspricht 1000px bei 16px Basisgröße */
+  height: 43.75rem;    /* entspricht 700px bei 16px Basisgröße */
+    border: 0.125rem solid #000000;
+    border-radius: 0.9375rem;
+  overflow: hidden;    /* verhindert, dass Ecken über den Rahmen ragen */
+  box-sizing: border-box;
 }
